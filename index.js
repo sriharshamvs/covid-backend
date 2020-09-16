@@ -1,41 +1,55 @@
+const fs = require('fs')
+const path = require('path')
 const express = require('express')
 const cors = require('cors')
-const app = express()
-const fs = require('fs')
-const csv = require('csv-parser')
-const port = 9000
 
-const covid = []
+const app = express()
+const port = 9000
 
 const index = (req, res) => {
   res.status(200).send({
-    message: 'Server is Running at http://localhost:' + port,
+    message: 'Server is Running at http://127.0.0.1:' + port,
     status: 'up',
     success: true,
   })
 }
 
 const covidData = (req, res) => {
-  const csvPath = './data/covid.csv'
-
-  fs.createReadStream(csvPath)
-    .pipe(csv())
-    .on('data', (row) => {
-      const d = {
-        province: row.province,
-        country: row.country,
-        latitude: +row.latitude,
-        longitude: +row.longitude,
-        date: new Date(row.date),
-        total_confirmed: +row.total_confirmed,
-      }
-      covid.push(d)
+  const coviData = csvToJson()
+  if (coviData.length > 0) {
+    res.status(200).json(coviData)
+  } else {
+    res.status(500).send({
+      message: 'Internal Server Error',
     })
-    .on('end', () => {})
-  res.status(200).json({
-    message: 'COVID-19 Data',
-    data: covid,
+  }
+}
+
+const csvToJson = () => {
+  var filePath = path.join(__dirname, './data/covid.csv')
+
+  var rawData = fs.readFileSync(filePath, { encoding: 'utf-8' }, function (
+    err
+  ) {
+    console.log(err)
   })
+  rawData = rawData.split('\n')
+  rawData.shift()
+
+  const jsonData = rawData.map((row) => {
+    values = row.split(',')
+    const d = {
+      province: values[0],
+      country: values[1],
+      latitude: +values[2],
+      longitude: +values[3],
+      date: new Date(values[4]),
+      total_confirmed: +values[5],
+    }
+    return d
+  })
+
+  return jsonData
 }
 
 app.use(cors())
@@ -43,5 +57,5 @@ app.get('/', index)
 app.get('/covid', covidData)
 
 app.listen(port, () => {
-  console.log('Server Started on http://localhost:' + port)
+  console.log('Server Started on http://127.0.0.1:' + port)
 })
