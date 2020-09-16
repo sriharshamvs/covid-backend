@@ -13,12 +13,10 @@ const index = (req, res) => {
     status: 'up',
     success: true,
   })
-  console.log('Hello World!')
 }
 
 const covidData = (req, res) => {
   const csvPath = './data/covid.csv'
-  console.log('Inside covid route')
 
   fs.createReadStream(csvPath)
     .pipe(csv())
@@ -33,11 +31,11 @@ const covidData = (req, res) => {
       }
       covid.push(d)
     })
-    .on('end', () => {
-      console.log('Done with end section')
-    })
-  res.status(200).json(covid)
-  // res.json(covid)
+    .on('end', () => {})
+  res.status(200).json({
+    message: 'COVID-19 Data',
+    data: covid,
+  })
 }
 
 app.use(cors())
