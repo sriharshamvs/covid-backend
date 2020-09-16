@@ -17,7 +17,10 @@ const index = (req, res) => {
 const covidData = (req, res) => {
   const coviData = csvToJson()
   if (coviData.length > 0) {
-    res.status(200).json(coviData)
+    res.status(200).send({
+      message: 'COVID-19 Dataset',
+      data: coviData,
+    })
   } else {
     res.status(500).send({
       message: 'Internal Server Error',
