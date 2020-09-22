@@ -46,7 +46,7 @@ const csvToJson = () => {
       country: values[1],
       latitude: +values[2],
       longitude: +values[3],
-      date: new Date(values[4]),
+      date: values[4],
       total_confirmed: +values[5],
     }
     return d
