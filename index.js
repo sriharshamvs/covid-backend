@@ -33,22 +33,8 @@ const csvToJson = () => {
   ) {
     console.log(err)
   })
-  rawData = rawData.split('\n')
-  rawData.shift()
-
-  const jsonData = rawData.map((row) => {
-    values = row.split(',')
-    const d = {
-      province: values[0],
-      country: values[1],
-      latitude: +values[2],
-      longitude: +values[3],
-      date: new Date(values[4]),
-      total_confirmed: +values[5],
-    }
-    return d
-  })
-
+  const jsonData = rawData.split('\n')
+  
   return jsonData
 }
 
