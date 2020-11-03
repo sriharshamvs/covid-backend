@@ -36,6 +36,7 @@ const csvToJson = () => {
   ) {
     console.log(err)
   })
+<<<<<<< HEAD
   rawData = rawData.split('\n')
   rawData.shift()
 
@@ -52,6 +53,10 @@ const csvToJson = () => {
     return d
   })
 
+=======
+  const jsonData = rawData.split('\n')
+  
+>>>>>>> dev
   return jsonData
 }
 
